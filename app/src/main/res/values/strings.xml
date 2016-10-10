@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MarvelApp</string>
+    <string name="facebook_app_id">1752616008324948</string>
+    <string name="logout">Log out</string>
 </resources>
