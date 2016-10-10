@@ -5,7 +5,7 @@ import android.app.Application;
 /**
  * Created by FranciscoFranco on 9/25/16.
  */
-public class MyApplication extends Application {
+public class MyApplication extends Application  {
     private static MyApplication mInstance;
 
     @Override

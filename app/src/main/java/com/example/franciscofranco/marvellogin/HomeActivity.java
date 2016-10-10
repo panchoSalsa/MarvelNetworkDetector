@@ -18,7 +18,8 @@ import com.facebook.login.LoginManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity
+        implements ConnectivityReceiver.ConnectivityReceiverListener {
     private CallbackManager callbackManager;
     private TextView info;
 
@@ -32,12 +33,18 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         info = (TextView) findViewById(R.id.info);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyApplication.getInstance().setConnectivityListener(this);
 
         greet();
     }
 
-    private void gotoLogin(){
-        android.content.Intent intent = new Intent(this, MainActivity.class);
+    private void gotoMain() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
         finish();
@@ -46,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
     private void logoutUser() {
         if (AccessToken.getCurrentAccessToken() != null && com.facebook.Profile.getCurrentProfile() != null) {
             LoginManager.getInstance().logOut();
-            gotoLogin();
+            gotoMain();
         }
     }
 
@@ -102,4 +109,11 @@ public class HomeActivity extends AppCompatActivity {
 
         info.setText(sb.toString());
     }
+
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (! ConnectivityReceiver.isConnected()) {
+            gotoMain();
+        }
+    }
+
 }

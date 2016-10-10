@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -21,11 +20,8 @@ public class MainActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private ImageView image;
-    private boolean isConnected;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
-
-    // i need to store my buttton or else it will get destroyed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +30,9 @@ public class MainActivity extends AppCompatActivity
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
-        Log.d("FRANCO_DEBUG", "Main onCreate()");
-
-//        if (isLoggedIn()) {
-//            Log.d("FRANCO_DEBUG", "going to home");
-//            moveToHome();
-//        }
-
-        // fix
-
         setContentView(R.layout.activity_main);
 
         image = (ImageView) findViewById(R.id.img);
-//        btn = (Button) findViewById(R.id.button1);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
 
@@ -75,12 +61,7 @@ public class MainActivity extends AppCompatActivity
         // register connection status listener
         MyApplication.getInstance().setConnectivityListener(this);
 
-        checkConnection();
-
-        if (isConnected && isLoggedIn()) {
-            Log.d("FRANCO_DEBUG", "going to home");
-            moveToHome();
-        }
+        startingState();
     }
 
     public boolean isLoggedIn() {
@@ -103,8 +84,8 @@ public class MainActivity extends AppCompatActivity
         moveToHome();
     }
 
-    private void checkConnection() {
-        isConnected = ConnectivityReceiver.isConnected();
+    private void startingState() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
         myFunc(isConnected);
     }
 
