@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private ImageView image;
-    private Button btn;
+    private boolean isConnected;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
@@ -33,6 +33,15 @@ public class MainActivity extends AppCompatActivity
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
+
+        Log.d("FRANCO_DEBUG", "Main onCreate()");
+
+//        if (isLoggedIn()) {
+//            Log.d("FRANCO_DEBUG", "going to home");
+//            moveToHome();
+//        }
+
+        // fix
 
         setContentView(R.layout.activity_main);
 
@@ -57,8 +66,6 @@ public class MainActivity extends AppCompatActivity
                 // App code
             }
         });
-
-        checkConnection();
     }
 
     @Override
@@ -67,6 +74,25 @@ public class MainActivity extends AppCompatActivity
 
         // register connection status listener
         MyApplication.getInstance().setConnectivityListener(this);
+
+        checkConnection();
+
+        if (isConnected && isLoggedIn()) {
+            Log.d("FRANCO_DEBUG", "going to home");
+            moveToHome();
+        }
+    }
+
+    public boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
+
+    private void moveToHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+
+        finish();
     }
 
     @Override
@@ -74,20 +100,18 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-
-        finish();
+        moveToHome();
     }
 
     private void checkConnection() {
-        boolean isConnected = ConnectivityReceiver.isConnected();
+        isConnected = ConnectivityReceiver.isConnected();
         myFunc(isConnected);
     }
 
     private void myFunc(boolean isConnected) {
-
-        if (isConnected) {
+        if (isConnected && isLoggedIn()) {
+            moveToHome();
+        } else if (isConnected ) {
             displayLogin();
         } else {
             displayNetworkError();
@@ -122,7 +146,7 @@ public class MainActivity extends AppCompatActivity
     private void displayNetworkError() {
         int value = 0;
 
-        btn.setVisibility(View.GONE);
+        loginButton.setVisibility(View.GONE);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             value = R.mipmap.network_error_landscape;
