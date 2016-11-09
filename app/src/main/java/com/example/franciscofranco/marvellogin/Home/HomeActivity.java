@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +38,6 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
     private SliderLayout mDemoSlider;
     private CallbackManager callbackManager;
     private TextView info;
-    private ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,37 +53,7 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
 
         mDemoSlider = (SliderLayout)findViewById(R.id.slider);
 
-        HashMap<String,String> url_maps = new HashMap<String, String>();
-        url_maps.put("Doctor Strange", "http://static.srcdn.com/wp-content/uploads/Doctor-Strange-Poster.jpg");
-        url_maps.put("Luke Cage", "http://cdn3-www.comingsoon.net/assets/uploads/gallery/luke-cage-set/cpvqrbzusaa3s3v.jpg");
-        url_maps.put("DareDevil", "http://nerdist.com/wp-content/uploads/2016/03/Daredevil-Season-2-Trio-Poster.jpg");
-        url_maps.put("Guardians of the Galaxy 2", "https://i0.wp.com/media2.slashfilm.com/slashfilm/wp/wp-content/images/guardiansofthegalaxy2-teaserposter-full-highquality.jpg");
-        url_maps.put("Jessica Jones", "http://cdn1-www.comingsoon.net/assets/uploads/gallery/marvels-jessica-jones/jessicajonesposter.jpg");
-
-
-        for(String name : url_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra",name);
-
-            mDemoSlider.addSlider(textSliderView);
-        }
-        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.ZoomOut);
-        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mDemoSlider.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
-        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-        mDemoSlider.setDuration(4000);
-        mDemoSlider.addOnPageChangeListener(this);
-
+        instantianteSlider();
     }
 
     @Override
@@ -174,6 +142,39 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
         if (! ConnectivityReceiver.isConnected()) {
             gotoMain();
         }
+    }
+
+    private void instantianteSlider() {
+        HashMap<String,String> url_maps = new HashMap<String, String>();
+        url_maps.put("Doctor Strange", "http://static.srcdn.com/wp-content/uploads/Doctor-Strange-Poster.jpg");
+        url_maps.put("Luke Cage", "http://cdn3-www.comingsoon.net/assets/uploads/gallery/luke-cage-set/cpvqrbzusaa3s3v.jpg");
+        url_maps.put("DareDevil", "http://nerdist.com/wp-content/uploads/2016/03/Daredevil-Season-2-Trio-Poster.jpg");
+        url_maps.put("Guardians of the Galaxy 2", "https://i0.wp.com/media2.slashfilm.com/slashfilm/wp/wp-content/images/guardiansofthegalaxy2-teaserposter-full-highquality.jpg");
+        url_maps.put("Jessica Jones", "http://cdn1-www.comingsoon.net/assets/uploads/gallery/marvels-jessica-jones/jessicajonesposter.jpg");
+
+
+        for(String name : url_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(this);
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(url_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mDemoSlider.addSlider(textSliderView);
+        }
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.ZoomOut);
+        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mDemoSlider.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
+        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+        mDemoSlider.setDuration(4000);
+        mDemoSlider.addOnPageChangeListener(this);
     }
 
     @Override
