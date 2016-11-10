@@ -1,6 +1,7 @@
 package com.example.franciscofranco.marvellogin.Home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -146,10 +146,10 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
 
     private void instantianteSlider() {
         HashMap<String,String> url_maps = new HashMap<String, String>();
-        url_maps.put("Doctor Strange", "http://static.srcdn.com/wp-content/uploads/Doctor-Strange-Poster.jpg");
+        //url_maps.put("Doctor Strange", "http://static.srcdn.com/wp-content/uploads/Doctor-Strange-Poster.jpg");
         url_maps.put("Luke Cage", "http://cdn3-www.comingsoon.net/assets/uploads/gallery/luke-cage-set/cpvqrbzusaa3s3v.jpg");
         url_maps.put("DareDevil", "http://nerdist.com/wp-content/uploads/2016/03/Daredevil-Season-2-Trio-Poster.jpg");
-        url_maps.put("Guardians of the Galaxy 2", "https://i0.wp.com/media2.slashfilm.com/slashfilm/wp/wp-content/images/guardiansofthegalaxy2-teaserposter-full-highquality.jpg");
+        //url_maps.put("Guardians of the Galaxy 2", "https://i0.wp.com/media2.slashfilm.com/slashfilm/wp/wp-content/images/guardiansofthegalaxy2-teaserposter-full-highquality.jpg");
         url_maps.put("Jessica Jones", "http://cdn1-www.comingsoon.net/assets/uploads/gallery/marvels-jessica-jones/jessicajonesposter.jpg");
 
 
@@ -179,8 +179,39 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(this,slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
-        Log.d("FRANCO_DEBUG", "onSliderClicked");
+        //Toast.makeText(this,slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
+        //Log.d("FRANCO_DEBUG", "onSliderClicked");
+
+        String netFlixId = getNetFlixId((String) slider.getBundle().get("extra"));
+
+        netflixIntent(netFlixId);
+    }
+
+    public String getNetFlixId(String title) {
+
+        String netFlixId = null;
+
+        switch (title) {
+            case "Luke Cage":
+                netFlixId = "80002537";
+                break;
+            case "Jessica Jones":
+                netFlixId = "80002311";
+                break;
+            case "DareDevil":
+                netFlixId = "80018294";
+                break;
+        }
+        return netFlixId;
+    }
+
+    public void netflixIntent(String netFlixId ) {
+        String watchUrl = "http://www.netflix.com/title/" + netFlixId;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
+        intent.setData(Uri.parse(watchUrl));
+        startActivity(intent);
     }
 
     @Override
