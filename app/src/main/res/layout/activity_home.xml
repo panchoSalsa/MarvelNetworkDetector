@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Search by Character"
         android:layout_below="@+id/info"
+        android:onClick="goToSearch"
         android:layout_centerInParent="true" />
 
     <Button

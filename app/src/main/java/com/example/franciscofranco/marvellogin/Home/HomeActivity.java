@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -224,4 +225,9 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
 
     @Override
     public void onPageScrollStateChanged(int state) {}
+
+    public void goToSearch(View view) {
+        Intent intent = new Intent(this, Search.class);
+        startActivity(intent);
+    }
 }
