@@ -11,10 +11,10 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.franciscofranco.marvellogin.MarvelAPI.HeroRequestTask;
 import com.example.franciscofranco.marvellogin.R;
 import com.example.franciscofranco.marvellogin.RenderingLogic.HeroJSONAdapter;
 
-import com.example.franciscofranco.marvellogin.MarvelAPI.HeroRequestTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,9 +73,12 @@ public class HeroByName extends AppCompatActivity {
             name = obj.getString("name");
 
             JSONObject thumbnail = obj.getJSONObject("thumbnail");
+
             thumbnailUrl = thumbnail.getString("path")
                     + "."
                     + thumbnail.getString("extension") ;
+
+            Log.d("FRANCO_DEBUG", "url: " + thumbnailUrl);
 
             description = obj.getString("description");
 
@@ -110,5 +113,6 @@ public class HeroByName extends AppCompatActivity {
         } else {
             fetchData(hero);
         }
+
     }
 }
