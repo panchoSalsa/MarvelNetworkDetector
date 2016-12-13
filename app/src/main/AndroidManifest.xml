@@ -38,7 +38,7 @@
 
         <activity android:name=".Home.HomeActivity" >
         </activity>
-        <activity android:name=".Home.Search" >
+        <activity android:name=".Home.HeroByName" >
         </activity>
     </application>
 

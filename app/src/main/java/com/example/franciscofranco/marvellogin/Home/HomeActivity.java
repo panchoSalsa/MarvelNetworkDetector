@@ -227,7 +227,15 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
     public void onPageScrollStateChanged(int state) {}
 
     public void goToSearch(View view) {
-        Intent intent = new Intent(this, Search.class);
+
+        Log.d("FRANCO_DEBUG", "inside goToSearch");
+
+        Intent intent = new Intent(this, HeroByName.class);
+
+        Log.d("FRANCO_DEBUG", "about to start intent");
+
         startActivity(intent);
+
+
     }
 }
