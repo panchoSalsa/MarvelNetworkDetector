@@ -1,5 +1,7 @@
 package com.example.franciscofranco.marvellogin.Home;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -39,10 +40,13 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
     private SliderLayout mDemoSlider;
     private CallbackManager callbackManager;
     private TextView info;
+    private static Context mContext;
+    private static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -55,6 +59,8 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
         mDemoSlider = (SliderLayout)findViewById(R.id.slider);
 
         instantianteSlider();
+
+        mContext = activity = this;
     }
 
     @Override
@@ -72,14 +78,14 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
         super.onStop();
     }
 
-    private void gotoMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    public static void gotoMain() {
+        Intent intent = new Intent(mContext, MainActivity.class);
+        mContext.startActivity(intent);
 
-        finish();
+        activity.finish();
     }
 
-    private void logoutUser() {
+    public static void logoutUser() {
         if (AccessToken.getCurrentAccessToken() != null && com.facebook.Profile.getCurrentProfile() != null) {
             LoginManager.getInstance().logOut();
             gotoMain();
@@ -99,6 +105,10 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
         switch (item.getItemId()) {
             case R.id.action_logout:
                 logoutUser();
+                return true;
+
+            case R.id.search:
+                goToSearch();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -226,16 +236,15 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
     @Override
     public void onPageScrollStateChanged(int state) {}
 
-    public void goToSearch(View view) {
+    public void goToSearch() {
 
-        Log.d("FRANCO_DEBUG", "inside goToSearch");
+        Log.d("FRANCO_DEBU8G", "inside goToSearch");
 
         Intent intent = new Intent(this, HeroByName.class);
 
         Log.d("FRANCO_DEBUG", "about to start intent");
 
         startActivity(intent);
-
 
     }
 }

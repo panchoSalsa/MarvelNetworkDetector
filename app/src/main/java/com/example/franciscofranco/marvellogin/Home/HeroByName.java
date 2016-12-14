@@ -1,11 +1,17 @@
 package com.example.franciscofranco.marvellogin.Home;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -21,7 +27,7 @@ import org.json.JSONObject;
 public class HeroByName extends AppCompatActivity {
 
 
-    private EditText editText;
+    //private EditText editText;
 
     public static ListView listView;
 
@@ -40,8 +46,6 @@ public class HeroByName extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hero_by_name);
 
-        editText = (EditText) findViewById(R.id.editText);
-
         listView = (ListView) findViewById(R.id.heroList);
 
         heroJSONAdapter = new HeroJSONAdapter(this, getLayoutInflater());
@@ -56,6 +60,35 @@ public class HeroByName extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        promptForInput();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar actions click
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                HomeActivity.logoutUser();
+                return true;
+
+            case R.id.search:
+                promptForInput();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void triggerIntent(int position) {
@@ -100,19 +133,34 @@ public class HeroByName extends AppCompatActivity {
 
     }
 
-    public void Search(View view) {
+    private void promptForInput() {
+        final EditText txtUrl = new EditText(this);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Search For Your Hero")
+                .setView(txtUrl)
+                .setPositiveButton("Search", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String hero = txtUrl.getText().toString();
+                        Search(hero);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                // .show().getWindow..... show alertDialog with keyboard ready to type
+                .show().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
+    public void Search(String hero) {
 
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(),
-                InputMethodManager.RESULT_UNCHANGED_SHOWN);
-
-        String hero = editText.getText().toString();
 
         if (hero.isEmpty()) {
             return;
         } else {
             fetchData(hero);
         }
-
     }
 }
