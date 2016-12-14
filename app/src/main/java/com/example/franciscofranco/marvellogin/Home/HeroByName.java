@@ -89,6 +89,10 @@ public class HeroByName extends AppCompatActivity {
                 HomeActivity.logoutUser();
                 return true;
 
+            case R.id.netflix:
+                HomeActivity.goToNetflixSlider();
+                return true;
+
             case R.id.search:
                 promptForInput();
                 return true;
