@@ -42,6 +42,13 @@ public class Netflix extends AppCompatActivity implements BaseSliderView.OnSlide
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.netflix).setVisible(false);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar actions click
         switch (item.getItemId()) {
