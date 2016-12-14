@@ -20,20 +20,11 @@
         android:text="Welcome!"/>
 
     <Button
-        android:id="@+id/search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search by Character"
-        android:layout_below="@+id/info"
-        android:onClick="goToSearch"
-        android:layout_centerInParent="true" />
-
-    <Button
         android:id="@+id/browse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Browse Character List"
-        android:layout_below="@+id/search"
+        android:layout_below="@+id/info"
         android:layout_centerInParent="true" />
 
 
