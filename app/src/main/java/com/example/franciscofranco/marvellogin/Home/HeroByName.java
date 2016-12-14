@@ -3,10 +3,13 @@ package com.example.franciscofranco.marvellogin.Home;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.franciscofranco.marvellogin.MarvelAPI.HeroRequestTask;
 import com.example.franciscofranco.marvellogin.R;
@@ -26,10 +30,8 @@ import org.json.JSONObject;
 
 public class HeroByName extends AppCompatActivity {
 
-
-    //private EditText editText;
-
     public static ListView listView;
+    public TextView saveView;
 
     private HeroJSONAdapter heroJSONAdapter;
 
@@ -47,8 +49,12 @@ public class HeroByName extends AppCompatActivity {
         setContentView(R.layout.activity_hero_by_name);
 
         listView = (ListView) findViewById(R.id.heroList);
+        saveView = (TextView) findViewById(R.id.save);
 
-        heroJSONAdapter = new HeroJSONAdapter(this, getLayoutInflater());
+        saveView = (TextView) findViewById(R.id.save);
+        saveView.setOnDragListener(new MyDragListener());
+
+        heroJSONAdapter = new HeroJSONAdapter(this, getLayoutInflater(), saveView);
 
         listView.setAdapter(heroJSONAdapter);
 
@@ -56,7 +62,7 @@ public class HeroByName extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-                triggerIntent(position);
+                //triggerIntent(position);
             }
         });
 
@@ -161,6 +167,40 @@ public class HeroByName extends AppCompatActivity {
             return;
         } else {
             fetchData(hero);
+        }
+    }
+
+    class MyDragListener implements View.OnDragListener {
+        Drawable enterShape = getResources().getDrawable(
+                R.drawable.shape_droptarget);
+        Drawable normalShape = getResources().getDrawable(R.drawable.shape);
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    v.setBackgroundDrawable(enterShape);
+                    Vibrator vb = (Vibrator)  getSystemService(Context.VIBRATOR_SERVICE);
+                    vb.vibrate(100);
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    v.setBackgroundDrawable(normalShape);
+                    break;
+                case DragEvent.ACTION_DROP:
+                    saveView.setText("Save");
+                    View view = (View) event.getLocalState();
+                    view.setVisibility(View.VISIBLE);
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    v.setBackgroundDrawable(normalShape);
+                    saveView.setText("Save");
+                default:
+                    break;
+            }
+            return true;
         }
     }
 }

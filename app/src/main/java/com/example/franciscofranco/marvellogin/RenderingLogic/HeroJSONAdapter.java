@@ -1,7 +1,10 @@
 package com.example.franciscofranco.marvellogin.RenderingLogic;
 
+import android.content.ClipData;
 import android.content.Context;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,12 +23,14 @@ public class HeroJSONAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private JSONArray mJsonArray;
+    public TextView saveView;
 
-    public HeroJSONAdapter(Context context, LayoutInflater inflater) {
+    public HeroJSONAdapter(Context context, LayoutInflater inflater, TextView saveView) {
 
         mContext = context;
         mInflater = inflater;
         mJsonArray = new JSONArray();
+        this.saveView = saveView;
 
     }
 
@@ -44,6 +49,30 @@ public class HeroJSONAdapter extends BaseAdapter {
         return position;
     }
 
+    public final class MyCustomTouchListener implements View.OnTouchListener {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                //MainActivity.saveView.setText("Drop to Save");
+
+                Vibrator vb = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                vb.vibrate(100);
+
+                saveView.setText("Drop to Save");
+
+                ClipData data = ClipData.newPlainText("", "");
+//                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+//                        (ImageView) view.findViewById(R.id.imageView1));
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                        view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                //view.setVisibility(View.INVISIBLE);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CharactersViewHolder holder;
@@ -58,6 +87,7 @@ public class HeroJSONAdapter extends BaseAdapter {
             // create a new "Holder" with subviews
             holder = new CharactersViewHolder();
             holder.thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
+            holder.thumbnail.setOnTouchListener(new MyCustomTouchListener());
             holder.name = (TextView) convertView.findViewById(R.id.name);
 
             // hang onto this holder for future recyclage
