@@ -51,4 +51,14 @@ public class HeroDBHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery( "SELECT * FROM " + HERO_TABLE_NAME, null );
         return res;
     }
+
+    public boolean heroExists(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] params = new String[]{ name };
+
+        Cursor res = db.rawQuery("Select * FROM " + HERO_TABLE_NAME + " WHERE " + HERO_COLUMN_NAME
+                + " = ?", params );
+
+        return res.getCount() != 0;
+    }
 }

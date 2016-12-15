@@ -242,7 +242,9 @@ public class HeroByName extends AppCompatActivity {
 
             Log.d("FRANCO_DEBUG", name + " " + imageURL);
 
-            dbHelper.insertHero(name, imageURL);
+            if (! dbHelper.heroExists(name) ) {
+                dbHelper.insertHero(name, imageURL);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
