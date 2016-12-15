@@ -181,8 +181,6 @@ public class HeroRequestTask extends AsyncTask<String, Void, JSONObject> {
                 e.printStackTrace();
             }
         }
-
         return result;
     }
-
 }
