@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.franciscofranco.marvellogin.MarvelAPI.HeroRequestTask;
 import com.example.franciscofranco.marvellogin.R;
 import com.example.franciscofranco.marvellogin.RenderingLogic.HeroJSONAdapter;
+import com.example.franciscofranco.marvellogin.SQLite.HeroDBHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +33,9 @@ public class HeroByName extends AppCompatActivity {
 
     public static ListView listView;
     public TextView saveView;
+    public static int listViewPosition = 0;
 
+    private HeroDBHelper dbHelper;
     private HeroJSONAdapter heroJSONAdapter;
 
     public static final String NAME = "name";
@@ -55,6 +58,8 @@ public class HeroByName extends AppCompatActivity {
         saveView.setOnDragListener(new MyDragListener());
 
         heroJSONAdapter = new HeroJSONAdapter(this, getLayoutInflater(), saveView);
+
+        dbHelper = new HeroDBHelper(this);
 
         listView.setAdapter(heroJSONAdapter);
 
@@ -194,6 +199,12 @@ public class HeroByName extends AppCompatActivity {
                     v.setBackgroundDrawable(normalShape);
                     break;
                 case DragEvent.ACTION_DROP:
+
+                    // Saving Hero
+                    Object obj = listView.getItemAtPosition(listViewPosition);
+                    JSONObject jsonObject = (JSONObject) obj;
+                    addHeroToDB(jsonObject);
+
                     saveView.setText("Save");
                     View view = (View) event.getLocalState();
                     view.setVisibility(View.VISIBLE);
@@ -205,6 +216,36 @@ public class HeroByName extends AppCompatActivity {
                     break;
             }
             return true;
+        }
+    }
+
+    private void addHeroToDB(JSONObject jsonObject) {
+        Log.d("FRANCO_DEBUG", "inside addHeroToDB");
+        parseJSONObject(jsonObject);
+    }
+
+    public void parseJSONObject(JSONObject obj) {
+        Log.d("FRANCO_DEBUG", "parseJSONObject");
+
+        String name = null;
+        String imageURL = null;
+
+        try {
+
+            name = obj.getString("name");
+
+            JSONObject thumbnail = obj.getJSONObject("thumbnail");
+
+            imageURL = thumbnail.getString("path")
+                    + "."
+                    + thumbnail.getString("extension");
+
+            Log.d("FRANCO_DEBUG", name + " " + imageURL);
+
+            dbHelper.insertHero(name, imageURL);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -248,5 +249,10 @@ public class HomeActivity extends AppCompatActivity implements BaseSliderView.On
     public static void goToNetflixSlider() {
         Intent intent = new Intent(mContext, Netflix.class);
         mContext.startActivity(intent);
+    }
+
+    public void goToStorage(View view) {
+        Intent intent = new Intent(this, Storage.class);
+        this.startActivity(intent);
     }
 }

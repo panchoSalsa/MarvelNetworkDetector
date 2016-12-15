@@ -43,6 +43,8 @@
         </activity>
         <activity android:name=".Home.Netflix" >
         </activity>
+        <activity android:name=".Home.Storage" >
+        </activity>
     </application>
 
 </manifest>

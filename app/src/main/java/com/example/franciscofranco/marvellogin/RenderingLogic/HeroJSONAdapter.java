@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.franciscofranco.marvellogin.Home.HeroByName;
 import com.example.franciscofranco.marvellogin.R;
 import com.squareup.picasso.Picasso;
 
@@ -50,12 +51,20 @@ public class HeroJSONAdapter extends BaseAdapter {
     }
 
     public final class MyCustomTouchListener implements View.OnTouchListener {
+        public int pos;
+
+        public MyCustomTouchListener(int pos) {
+            this.pos = pos;
+        }
+
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 //MainActivity.saveView.setText("Drop to Save");
 
                 Vibrator vb = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
                 vb.vibrate(100);
+
+                HeroByName.listViewPosition = this.pos;
 
                 saveView.setText("Drop to Save");
 
@@ -87,7 +96,9 @@ public class HeroJSONAdapter extends BaseAdapter {
             // create a new "Holder" with subviews
             holder = new CharactersViewHolder();
             holder.thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
-            holder.thumbnail.setOnTouchListener(new MyCustomTouchListener());
+
+            // This needs to be commented out after finding a solution
+            //holder.thumbnail.setOnTouchListener(new MyCustomTouchListener(position));
             holder.name = (TextView) convertView.findViewById(R.id.name);
 
             // hang onto this holder for future recyclage
@@ -100,6 +111,12 @@ public class HeroJSONAdapter extends BaseAdapter {
         }
 
         JSONObject jsonObject = (JSONObject) getItem(position);
+
+
+        // This needs to be modified everytime, need to find a solution
+        // ******************
+        holder.thumbnail.setOnTouchListener(new MyCustomTouchListener(position));
+
 
         parseJSONObject(holder, jsonObject);
 
@@ -114,6 +131,7 @@ public class HeroJSONAdapter extends BaseAdapter {
         try {
 
             name = obj.getString("name");
+
             JSONObject thumbnail = obj.getJSONObject("thumbnail");
 
             holder.name.setText(name);
