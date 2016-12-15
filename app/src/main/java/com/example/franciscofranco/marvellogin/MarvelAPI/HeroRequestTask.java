@@ -144,6 +144,8 @@ public class HeroRequestTask extends AsyncTask<String, Void, JSONObject> {
 
             else {
 
+                results = filterOutHeroesWithNoImages(results);
+
                 adapter.updateData(results);
 
             }
@@ -155,4 +157,32 @@ public class HeroRequestTask extends AsyncTask<String, Void, JSONObject> {
         Log.d("FRANCO_DEBUG", "onPostExecute() ENDEND");
 
     }
+
+    private JSONArray filterOutHeroesWithNoImages(JSONArray jsonArray) {
+        JSONArray result = new JSONArray();
+
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            try {
+                JSONObject obj = (JSONObject) jsonArray.get(i);
+
+                JSONObject thumbnail = obj.getJSONObject("thumbnail");
+
+                String imageURL = thumbnail.getString("path")
+                        + "."
+                        + thumbnail.getString("extension");
+
+                String fileName = imageURL.substring(imageURL.lastIndexOf('/') + 1);
+
+                if (! fileName.equals("image_not_available.jpg")) {
+                    result.put(obj);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
 }

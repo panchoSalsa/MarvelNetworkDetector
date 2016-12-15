@@ -240,7 +240,10 @@ public class HeroByName extends AppCompatActivity {
                     + "."
                     + thumbnail.getString("extension");
 
-            Log.d("FRANCO_DEBUG", name + " " + imageURL);
+
+            String fileName = imageURL.substring(imageURL.lastIndexOf('/') + 1);
+
+            Log.d("FRANCO_DEBUG", "filename is" + fileName);
 
             if (! dbHelper.heroExists(name) ) {
                 dbHelper.insertHero(name, imageURL);

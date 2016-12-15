@@ -26,8 +26,8 @@ public class Storage extends AppCompatActivity {
         cursor = dbHelper.getAllHeroes();
 
         String [] columns = new String[] {
-                HeroDBHelper.HERO_COLUMN_ID,
-                HeroDBHelper.HERO_COLUMN_NAME
+                HeroDBHelper.HERO_COLUMN_NAME,
+                HeroDBHelper.HERO_COLUMN_IMG
         };
 
         int [] widgets = new int[] {
